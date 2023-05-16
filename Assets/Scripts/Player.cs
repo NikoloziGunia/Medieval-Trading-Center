@@ -9,13 +9,17 @@ public class Player : MonoBehaviour
 {
     public InventoryManager inventoryManager;
     public Seller seller;
-    
+
     public List<Item> itemList = new();
     public float moneyCount;
 
+    [SerializeField] private List<ItemVisual> itemVisuals;
+
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private TMP_Text moneyText;
-    public bool canSell;
+
+
+    private bool canSell;
 
     private void Start()
     {
@@ -28,7 +32,7 @@ public class Player : MonoBehaviour
         {
             if (!itemList.Contains(item)) //buy
             {
-                if (moneyCount >=item.price)
+                if (moneyCount >= item.price)
                 {
                     moneyCount -= item.price;
                     moneyText.text = moneyCount.ToString();
@@ -38,7 +42,7 @@ public class Player : MonoBehaviour
                     inventoryManager.ListItems();
                 }
             }
-            else                  //sell
+            else //sell
             {
                 moneyCount += item.price;
                 moneyText.text = moneyCount.ToString();
@@ -50,9 +54,39 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Debug.Log("dressup");
             //ToDo: dressUp
+            DressUp(item);
         }
+    }
+
+
+    void DressUp(Item item)
+    {
+        if (item.type == ItemTypes.types.Body)
+        {
+            foreach (var itemVisual in itemVisuals)
+            {
+                if (itemVisual.type == ItemTypes.types.Body)
+                    itemVisual.gameObject.SetActive(item.id == itemVisual.id);
+            }
+        }
+        else if (item.type == ItemTypes.types.Weapon)
+        {
+            foreach (var itemVisual in itemVisuals)
+            {
+                if (itemVisual.type == ItemTypes.types.Weapon)
+                    itemVisual.gameObject.SetActive(item.id == itemVisual.id);
+            }
+        }
+        else if (item.type == ItemTypes.types.Head)
+        {
+            foreach (var itemVisual in itemVisuals)
+            {
+                if (itemVisual.type == ItemTypes.types.Head)
+                    itemVisual.gameObject.SetActive(item.id == itemVisual.id);
+            }
+        }
+         
     }
 
     private void OnTriggerEnter2D(Collider2D col)
