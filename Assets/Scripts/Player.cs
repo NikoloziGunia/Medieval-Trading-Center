@@ -19,7 +19,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private List<ItemVisual> itemVisuals;
     [SerializeField] private TMP_Text moneyText;
-
+    [SerializeField] private ParticleSystem moneyIncomeParticle;
+    
+    private bool isMakingMoney;
     
     private void Start()
     {
@@ -52,9 +54,8 @@ public class Player : MonoBehaviour
                 inventoryManager.ListItems();
             }
         }
-        else
+        else // dress
         {
-            //ToDo: dressUp
             DressUp(item);
         }
     }
@@ -89,12 +90,29 @@ public class Player : MonoBehaviour
          
     }
 
+    IEnumerator GetMoney()
+    {
+        while (isMakingMoney)
+        {
+            moneyCount += 2;
+            moneyText.text = moneyCount.ToString();
+            yield return new WaitForSeconds(0.5f);
+            
+        }
+    }
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Seller"))
         {
             questionPanel.SetActive(true);
             Curseller = col;
+        }
+
+        if (col.gameObject.CompareTag("Money"))
+        {
+            isMakingMoney = true;
+            moneyIncomeParticle.Play();
+            StartCoroutine(GetMoney());
         }
     }
 
@@ -105,6 +123,12 @@ public class Player : MonoBehaviour
             questionPanel.SetActive(false);
             Curseller = null;
             inventoryManager.CloseTradingPanel();
+        }
+        
+        if (other.gameObject.CompareTag("Money"))
+        {
+            moneyIncomeParticle.Stop();
+            isMakingMoney = false;
         }
     }
 }
