@@ -11,16 +11,16 @@ public class Player : MonoBehaviour
     public Seller seller;
 
     public List<Item> itemList = new();
+    public Collider2D Curseller;
+    public GameObject questionPanel;
+    
     public float moneyCount;
+    public bool canSell;
 
     [SerializeField] private List<ItemVisual> itemVisuals;
-
-    [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private TMP_Text moneyText;
 
-
-    private bool canSell;
-
+    
     private void Start()
     {
         moneyText.text = moneyCount.ToString();
@@ -93,10 +93,8 @@ public class Player : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Seller"))
         {
-            canSell = true;
-            seller = col.GetComponent<Seller>();
-            inventoryManager.ListItems();
-            inventoryPanel.SetActive(true);
+            questionPanel.SetActive(true);
+            Curseller = col;
         }
     }
 
@@ -104,9 +102,9 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Seller"))
         {
-            canSell = false;
-            inventoryManager.ListItems();
-            inventoryPanel.SetActive(false);
+            questionPanel.SetActive(false);
+            Curseller = null;
+            inventoryManager.CloseTradingPanel();
         }
     }
 }

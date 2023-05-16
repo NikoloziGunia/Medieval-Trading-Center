@@ -16,6 +16,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Transform itemContent;
     [SerializeField] private Transform sellerItemContent;
     [SerializeField] private GameObject inventoryItem;
+    [SerializeField] private GameObject inventoryPanel;
+
+    public GameObject inventoryButton;
 
     private List<GameObject> allItems = new();
 
@@ -41,7 +44,35 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void OpenPlayers()
+    public  void OpenTradingPanel()
+    {
+        if (player.Curseller != null)
+        {
+            player.canSell = true;
+            player.seller = player.Curseller.GetComponent<Seller>();
+            ListItems();
+            inventoryPanel.SetActive(true);
+            inventoryButton.SetActive(false);
+            CloseQuestionPanel();
+        }
+    }
+    
+    public void CloseQuestionPanel()
+    {
+        player.questionPanel.SetActive(false);
+    }
+    public void CloseTradingPanel()
+    {
+        if (inventoryPanel.activeSelf)
+        {
+            player.canSell = false;
+            ListItems();
+            inventoryPanel.SetActive(false);
+            inventoryButton.SetActive(true);
+        }
+    }
+    
+    public void OpenInventory()
     {
         if (!playerInventoryPanel.activeSelf)
         {
