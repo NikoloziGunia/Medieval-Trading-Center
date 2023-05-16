@@ -18,7 +18,7 @@ public class uiManager : MonoBehaviour
 
     [SerializeField] private GameObject  brightnessPanel;
 
-    private string[] texts = { "Use WASD To Control Your Character", "Go With Any Merchant and Start Trading", "Click On Items You Want to Buy or Sell" };
+    private string[] texts = { "Use WASD To Control Your Character", "Go With Any Merchant and Start Trading", "Click On Items You Want to Buy or Sell" , "Stand On A Magic Stone To Make Money , There Is A Way To Make Infinite Money Tyr To Find It" };
     [SerializeField] private Sprite[] images;
     private int currentIndex = 0;
 

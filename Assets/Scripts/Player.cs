@@ -13,16 +13,14 @@ public class Player : MonoBehaviour
     public List<Item> itemList = new();
     public Collider2D Curseller;
     public GameObject questionPanel;
-    
+    public TMP_Text moneyText;
+
     public float moneyCount;
     public bool canSell;
-
+    
     [SerializeField] private List<ItemVisual> itemVisuals;
-    [SerializeField] private TMP_Text moneyText;
-    [SerializeField] private ParticleSystem moneyIncomeParticle;
-    
-    private bool isMakingMoney;
-    
+  
+
     private void Start()
     {
         moneyText.text = moneyCount.ToString();
@@ -87,32 +85,15 @@ public class Player : MonoBehaviour
                     itemVisual.gameObject.SetActive(item.id == itemVisual.id);
             }
         }
-         
     }
 
-    IEnumerator GetMoney()
-    {
-        while (isMakingMoney)
-        {
-            moneyCount += 2;
-            moneyText.text = moneyCount.ToString();
-            yield return new WaitForSeconds(0.5f);
-            
-        }
-    }
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Seller"))
         {
             questionPanel.SetActive(true);
             Curseller = col;
-        }
-
-        if (col.gameObject.CompareTag("Money"))
-        {
-            isMakingMoney = true;
-            moneyIncomeParticle.Play();
-            StartCoroutine(GetMoney());
         }
     }
 
@@ -123,12 +104,6 @@ public class Player : MonoBehaviour
             questionPanel.SetActive(false);
             Curseller = null;
             inventoryManager.CloseTradingPanel();
-        }
-        
-        if (other.gameObject.CompareTag("Money"))
-        {
-            moneyIncomeParticle.Stop();
-            isMakingMoney = false;
         }
     }
 }
